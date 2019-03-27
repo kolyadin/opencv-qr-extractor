@@ -11,8 +11,6 @@ validation_check:
   before_script:
     - apt-get update && apt-get install -y libzbar-dev
     - pip install opencv-python pyzbar
-    - ls -lah /fat-storage
     - ln -s /fat-storage/cashier-checks-samples samples
-    - mkdir found notfound
   script:
-    - python qr.py
+    - python qr.py samples/
