@@ -1,6 +1,9 @@
 stages:
   - test
 
+variables:
+  PIP_DOWNLOAD_CACHE: "/cache/python-pip"
+
 validation_check:
   stage: test
   image: python:3.7
