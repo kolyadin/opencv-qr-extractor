@@ -9,6 +9,7 @@ validation_check:
   image: python:3.7
   dependencies: []
   before_script:
+    - ln -s /cache/python-pip ~/.cache/pip
     - apt-get update && apt-get install -y libzbar-dev
     - pip install opencv-python pyzbar
     - ln -s /fat-storage/cashier-checks-samples /var/www/html/samples
