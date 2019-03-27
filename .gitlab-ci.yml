@@ -4,7 +4,7 @@ stages:
 variables:
   PIP_DOWNLOAD_CACHE: "/cache/python-pip"
 
-validation_check:
+detect_no_filter:
   stage: test
   image: python:3.7
   dependencies: []
@@ -13,4 +13,38 @@ validation_check:
     - pip install opencv-python pyzbar
     - ln -s /fat-storage/cashier-checks-samples samples
   script:
-    - python qr.py samples/
+    - python qr.py --dir samples/
+
+
+detect_filter_zoomer:
+  stage: test
+  image: python:3.7
+  dependencies: []
+  before_script:
+    - apt-get update && apt-get install -y libzbar-dev
+    - pip install opencv-python pyzbar
+    - ln -s /fat-storage/cashier-checks-samples samples
+  script:
+    - python qr.py --dir samples/ --filter zoomer
+
+detect_filter_gray:
+  stage: test
+  image: python:3.7
+  dependencies: []
+  before_script:
+    - apt-get update && apt-get install -y libzbar-dev
+    - pip install opencv-python pyzbar
+    - ln -s /fat-storage/cashier-checks-samples samples
+  script:
+    - python qr.py --dir samples/ --filter gray
+
+detect_filter_gray_with_zoomer:
+  stage: test
+  image: python:3.7
+  dependencies: []
+  before_script:
+    - apt-get update && apt-get install -y libzbar-dev
+    - pip install opencv-python pyzbar
+    - ln -s /fat-storage/cashier-checks-samples samples
+  script:
+    - python qr.py --dir samples/ --filter gray,zoomer
