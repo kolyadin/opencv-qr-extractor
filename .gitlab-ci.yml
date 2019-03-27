@@ -4,7 +4,8 @@ stages:
 variables:
   PIP_DOWNLOAD_CACHE: "/cache/python-pip"
 
-detect_no_filter:
+
+.temp: &temp
   stage: test
   image: python:3.7
   dependencies: []
@@ -12,39 +13,24 @@ detect_no_filter:
     - apt-get update && apt-get install -y libzbar-dev
     - pip install opencv-python pyzbar
     - ln -s /fat-storage/cashier-checks-samples samples
+
+no_filter:
+  <<: *temp
   script:
     - python qr.py --dir samples/
 
 
-detect_filter_zoomer:
-  stage: test
-  image: python:3.7
-  dependencies: []
-  before_script:
-    - apt-get update && apt-get install -y libzbar-dev
-    - pip install opencv-python pyzbar
-    - ln -s /fat-storage/cashier-checks-samples samples
+filter_zoomer:
+  <<: *temp
   script:
     - python qr.py --dir samples/ --filter zoomer
 
-detect_filter_gray:
-  stage: test
-  image: python:3.7
-  dependencies: []
-  before_script:
-    - apt-get update && apt-get install -y libzbar-dev
-    - pip install opencv-python pyzbar
-    - ln -s /fat-storage/cashier-checks-samples samples
+filter_gray:
+  <<: *temp
   script:
     - python qr.py --dir samples/ --filter gray
 
-detect_filter_gray_with_zoomer:
-  stage: test
-  image: python:3.7
-  dependencies: []
-  before_script:
-    - apt-get update && apt-get install -y libzbar-dev
-    - pip install opencv-python pyzbar
-    - ln -s /fat-storage/cashier-checks-samples samples
+filter_gray_with_zoomer:
+  <<: *temp
   script:
     - python qr.py --dir samples/ --filter gray,zoomer
