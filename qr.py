@@ -24,6 +24,7 @@ for filename in os.listdir(directory):
 
             if deepDecode:
                 smartFound = smartFound + 1
+                notFound = notFound - 1
                 print("success")
                 print(deepDecode)
             else:
