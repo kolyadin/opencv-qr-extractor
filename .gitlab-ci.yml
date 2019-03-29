@@ -42,6 +42,9 @@ php_basic:
   image: kolyadin/php:72
   dependencies: []
   before_script:
+    - rm -f /usr/local/etc/php/conf.d/xdebug.ini
+    - echo 'date.timezone=Europe/Moscow' >> /usr/local/etc/php/conf.d/extra.ini
+    - echo 'memory_limit = 3G' >> /usr/local/etc/php/conf.d/extra.ini
     - ln -s /fat-storage/cashier-checks-samples samples
     - composer install
   script:
