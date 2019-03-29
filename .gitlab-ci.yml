@@ -3,6 +3,7 @@ stages:
 
 variables:
   PIP_DOWNLOAD_CACHE: "/cache/python-pip"
+  COMPOSER_CACHE_DIR: "/cache/php-composer"
 
 
 .temp: &temp
@@ -34,3 +35,14 @@ filter_gray_with_zoomer:
   <<: *temp
   script:
     - python qr.py --dir samples/ --filter gray,zoomer
+
+
+php_basic:
+  stage: test
+  image: kolyadin/php:7.2
+  dependencies: []
+  before_script:
+    - ln -s /fat-storage/cashier-checks-samples samples
+    - composer install
+  script:
+    - php qr.php
