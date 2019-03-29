@@ -39,7 +39,7 @@ filter_gray_with_zoomer:
 
 php_basic:
   stage: test
-  image: kolyadin/php:7.2
+  image: kolyadin/php:72
   dependencies: []
   before_script:
     - ln -s /fat-storage/cashier-checks-samples samples
