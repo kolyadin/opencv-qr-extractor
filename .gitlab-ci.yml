@@ -25,20 +25,20 @@ variables:
 no_filter:
   <<: *temp
   script:
-    - python qr.py --dir samples/
+    - python qr.py --dir samples/ 2> /dev/null
 
 
 filter_zoomer:
   <<: *temp
   script:
-    - python qr.py --dir samples/ --filter zoomer
+    - python qr.py --dir samples/ --filter zoomer 2> /dev/null
 
 filter_gray:
   <<: *temp
   script:
-    - python qr.py --dir samples/ --filter gray
+    - python qr.py --dir samples/ --filter gray 2> /dev/null
 
 filter_gray_with_zoomer:
   <<: *temp
   script:
-    - python qr.py --dir samples/ --filter gray,zoomer
+    - python qr.py --dir samples/ --filter gray,zoomer 2> /dev/null

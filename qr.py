@@ -50,7 +50,7 @@ if args["dir"]:
                 continue
             else:
                 notFound = notFound + 1
-                eprint(os.path.join(args["dir"], filename), " / QR not found (", notFound, ")")
+                print(os.path.join(args["dir"], filename), " / QR not found (", notFound, ")")
                 f = open('notfound.txt', 'a')
                 f.write(filename + "\n")
                 f.close()
@@ -64,7 +64,7 @@ if args["dir"]:
 
                         print(filename, " / Deep analyze success :) (", smartFound, ") ")
                     else:
-                        eprint(filename, " / Deep analyze no luck :(")
+                        print(filename, " / Deep analyze no luck :(")
                         f = open('notfound_smart.txt', 'a')
                         f.write(filename + "\n")
                         f.close()
