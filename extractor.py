@@ -1,5 +1,5 @@
 from pyzbar import pyzbar
-import optimizer
+
 
 def decode(image):
     barcodes = pyzbar.decode(image)
@@ -14,8 +14,3 @@ def decode(image):
             break
 
     return codeFound
-
-
-def deepDecode(image):
-
-    return optimizer.zoomer(image)

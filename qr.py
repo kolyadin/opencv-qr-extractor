@@ -1,45 +1,38 @@
+from __future__ import print_function
 import cv2
 import sys
 import os
 import extractor
 import argparse
+import optimizer
+
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 
 directory = sys.argv[1]
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--img", required=False, help="path to the image file")
 ap.add_argument("-d", "--dir", required=False, help="path to the directory with images")
 ap.add_argument("-f", "--filter", required=False, help="Apply filter")
 args = vars(ap.parse_args())
+
 
 def deepDecode(image, filter):
     decoded_data = None
 
     if 'zoomer' == filter:
-        for x in range(1, 10):
-            smaller = cv2.resize(image, (0, 0), fx=x / 10, fy=x / 10)
-            extracted = extractor.decode(smaller)
-
-            if extracted is not None:
-                decoded_data = extracted
-                break
+        decoded_data = optimizer.zoomer(image)
 
     elif 'gray' == filter:
-        smaller = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        extracted = extractor.decode(smaller)
-
-        if extracted is not None:
-            decoded_data = extracted
+        decoded_data = optimizer.gray(image)
 
     elif 'gray,zoomer' == filter:
-        for x in range(1, 10):
-            smaller = cv2.resize(image, (0, 0), fx=x / 10, fy=x / 10)
-            gray = cv2.cvtColor(smaller, cv2.COLOR_BGR2GRAY)
-            extracted = extractor.decode(gray)
+        decoded_data = optimizer.gray(image)
 
-            if extracted is not None:
-                decoded_data = extracted
-                break
+        if decoded_data is None:
+            decoded_data = optimizer.zoomer(image)
 
     return decoded_data
 
@@ -57,7 +50,10 @@ if args["dir"]:
                 continue
             else:
                 notFound = notFound + 1
-                print(os.path.join(args["dir"], filename), " / QR not found (", notFound, ")")
+                eprint(os.path.join(args["dir"], filename), " / QR not found (", notFound, ")")
+                f = open('notfound.txt', 'a')
+                f.write(filename + "\n")
+                f.close()
 
                 if (args["filter"]):
                     print(filename, " / Performing deep analyze (", args["filter"], ")... ")
@@ -68,29 +64,17 @@ if args["dir"]:
 
                         print(filename, " / Deep analyze success :) (", smartFound, ") ")
                     else:
-                        print(filename, " / Deep analyze no luck :(")
-elif args["img"]:
-    src = cv2.imread(args["img"])
+                        eprint(filename, " / Deep analyze no luck :(")
+                        f = open('notfound_smart.txt', 'a')
+                        f.write(filename + "\n")
+                        f.close()
 
-    if extractor.decode(src):
-        found = found + 1
-        print(args["img"], " / QR found (", found, ")")
-    else:
-        notFound = notFound + 1
-        print(args["img"], " / QR not found (", notFound, ")")
-
-        if (args["filter"]):
-            print(args["img"], " / Performing deep analyze (", args["filter"], ")... ")
-
-            if deepDecode(src, args["filter"]):
-                smartFound = smartFound + 1
-                notFound = notFound - 1
-
-                print(args["img"], " / Deep analyze success :) (", smartFound, ") ")
-            else:
-                print(args["img"], " / Deep analyze no luck :(")
+overall = found + smartFound + notFound
 
 print("===Summary==")
+print("Overall: ", overall)
 print("Fast found: ", found)
 print("Smart found: ", smartFound)
 print("Not found: ", notFound)
+
+print("Efficiency: ", (found + smartFound) * 100 / overall, "%")

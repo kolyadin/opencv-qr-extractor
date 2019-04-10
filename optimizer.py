@@ -22,7 +22,7 @@ def gray(image):
     decoded_data = None
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # extracted = extractor.decod(gray)
+    extracted = extractor.decode(gray)
 
     if extracted is not None:
         decoded_data = extracted

@@ -3,7 +3,6 @@ stages:
 
 variables:
   PIP_DOWNLOAD_CACHE: "/cache/python-pip"
-  COMPOSER_CACHE_DIR: "/cache/php-composer"
 
 
 .temp: &temp
@@ -14,6 +13,14 @@ variables:
     - apt-get update && apt-get install -y libzbar-dev
     - pip install opencv-python pyzbar
     - ln -s /fat-storage/cashier-checks-samples samples
+  artifacts:
+    name: "$CI_JOB_ID"
+    when: on_success
+    expire_in: 6 month
+    paths:
+      - ./notfound.txt
+      - ./notfound_smart.txt
+
 
 no_filter:
   <<: *temp
@@ -35,17 +42,3 @@ filter_gray_with_zoomer:
   <<: *temp
   script:
     - python qr.py --dir samples/ --filter gray,zoomer
-
-
-php_basic:
-  stage: test
-  image: kolyadin/php:72
-  dependencies: []
-  before_script:
-    - rm -f /usr/local/etc/php/conf.d/xdebug.ini
-    - echo 'date.timezone=Europe/Moscow' >> /usr/local/etc/php/conf.d/extra.ini
-    - echo 'memory_limit = 3G' >> /usr/local/etc/php/conf.d/extra.ini
-    - ln -s /fat-storage/cashier-checks-samples samples
-    - composer install
-  script:
-    - php qr.php
