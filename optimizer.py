@@ -5,7 +5,7 @@ import extractor
 def zoomer(image):
     decoded_data = None
 
-    for x in range(1, 10):
+    for x in range(1, 100):
         smaller = cv2.resize(image, (0, 0), fx=x / 10, fy=x / 10)
         smaller = cv2.cvtColor(smaller, cv2.COLOR_BGR2GRAY)
 
