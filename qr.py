@@ -34,6 +34,8 @@ def deepDecode(image, filter):
         if decoded_data is None:
             decoded_data = optimizer.zoomer(image)
 
+    print(decoded_data)
+
     return decoded_data
 
 
