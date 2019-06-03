@@ -11,10 +11,15 @@ def zoomer(image):
 
         extracted = extractor.decode(smaller)
 
+        del smaller
+
         if extracted is not None:
             decoded_data = extracted
             print("Zoomer match reduce factor", x)
+            del extracted
             break
+
+
 
     if decoded_data is None:
 
@@ -24,9 +29,12 @@ def zoomer(image):
 
             extracted = extractor.decode(smaller)
 
+            del smaller
+
             if extracted is not None:
                 decoded_data = extracted
                 print("Zoomer match enlarge factor", x)
+                del extracted
                 break
 
     return decoded_data

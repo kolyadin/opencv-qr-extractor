@@ -4,3 +4,5 @@ LABEL maintainer="aleksey.kolyadin@isobar.ru"
 
 RUN apt-get update && apt-get install -y libzbar-dev
 RUN pip install opencv-python pyzbar Flask gevent
+
+CMD ["python", "/var/www/html/microservice.py"]
